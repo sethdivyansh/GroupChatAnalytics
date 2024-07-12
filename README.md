@@ -1,6 +1,6 @@
-# GroupMessageBarGraph
+# GroupChatAnalytics
 
-GroupMessageBarGraph is a Python script that generates a bar graph to visualize the number of messages sent by each member in a WhatsApp group chat. This tool can help you analyze the activity of group members and identify the most active participants.
+GroupChatAnalytics is a Python script that generates a bar graph to visualize the number of messages sent by line member in a WhatsApp group chat. This tool can help you analyze the activity of group members and identify the most active participants.
 
 ## Installation
 
@@ -8,7 +8,7 @@ GroupMessageBarGraph is a Python script that generates a bar graph to visualize 
 
    ```bash
    git clone https://github.com/sethdivyansh/GroupChatAnalytics.git
-   cd GroupMessageBarGraph
+   cd GroupChatAnalytics
 
    ```
 
@@ -32,7 +32,7 @@ GroupMessageBarGraph is a Python script that generates a bar graph to visualize 
 
 2. **Run the script:**
 
-   #### Inside the GroupMessageBarGraph folder
+   #### Inside the GroupChatAnalytics folder
 
    ```bash
    python whatsapp.py

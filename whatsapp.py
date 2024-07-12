@@ -1,40 +1,55 @@
 import matplotlib.pyplot as plt 
 
-file = open('FRESHERS_FORUM_2K24.txt', 'r')
+file_name = input("Enter the name of the file(without .txt): ")
+
+file = open(file_name+'.txt', 'r')
 
 count = {}
 
-for each in file:
+for line in file:
     
-    # continue if each not start with date
+    # continue if line not start with date
 
-    date = each.split(",")[0]
-    if len(date) != 10:
-        continue
+    date = line.split(",")[0]
+    if len(date) == 8 or len(date) == 10:
 
-    # check if each contain the word "joined" or "added"
-    # remove those that contain these words
-    if 'joined' in each or 'added' in each or 'pinned' in each or 'left' in each or 'removed' in each or 'changed' in each or 'created' in each or 'deleted' in each or 'admin approval' in each or 'changed this group' in each or 'changed the subject' in each or 'changed the group description' in each or "Only messages that mention @Meta AI are sent to Meta. Meta can't read any other messages in this chat. Some responses may be inaccurate or inappropriate. Tap to learn more." in each or ' message timer.' in each or 'turned off disappearing messages' in each or "Messages and calls are end" in each:
-        continue
+        # check if line contain the word "joined" or "added"
+        # remove those that contain these words
+        if 'joined' in line or 'added' in line or 'pinned' in line or 'left' in line or 'removed' in line or 'changed' in line or 'created' in line or 'admin approval' in line or 'changed this group' in line or 'changed the subject' in line or 'changed the group description' in line or "Only messages that mention @Meta AI are sent to Meta. Meta can't read any other messages in this chat. Some responses may be inaccurate or inappropriate. Tap to learn more." in line or ' message timer.' in line or 'turned off disappearing messages' in line or "Messages and calls are end" in line or "eleted this group's icon" in line or "arted a video call" in line or "lows like a stagnant pond. Where the faculty" in line or "reset this group's invite link" in line or "requested to join" in line:
+            continue
+        else:
+            name_or_number = line.split("-")
+            if len(name_or_number) > 1:
+                name_or_number = name_or_number[1].split(":")[0].strip()
+                if (name_or_number in count):
+                    count[name_or_number] += 1
+                else:
+                    count[name_or_number] = 1
     else:
-        name_or_number = each.split("-")
-        if len(name_or_number) > 1:
-            name_or_number = name_or_number[1].split(":")[0].strip()
-            if (name_or_number in count):
-                count[name_or_number] += 1
-            else:
-                count[name_or_number] = 1
+        continue
 
 x_axis = list(count.keys())
 y_axis = list(count.values())
-bar_color = '#3498db' 
+
+bar_colors = [
+    '#3498db',  # Blue
+    '#e74c3c',  # Red
+    '#2ecc71',  # Green
+    '#f1c40f',  # Yellow
+    '#9b59b6',  # Purple
+    '#1abc9c',  # Teal
+    '#e67e22',  # Orange
+    '#34495e'   # Dark Blue
+]
+
+# bar_color = '#3498db' 
 
 
 plt.figure(figsize=(30, 10))
 
 
 
-bars = plt.bar(x_axis, y_axis, align = 'center', color = bar_color, width=1)
+bars = plt.bar(x_axis, y_axis, align = 'center', color = [bar_colors[i % len(bar_colors)] for i in range(len(x_axis))], width=1)
 # plt.bar(courses, values, color ='maroon', width = 0.4)
 
 title = input("Enter the title of the graph: ")
