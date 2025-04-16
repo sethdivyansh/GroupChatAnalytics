@@ -1,31 +1,43 @@
+from collections import defaultdict
+
 import matplotlib.pyplot as plt 
+def is_valid_message(line):
+    # List of phrases to ignore
+    ignore_phrases = [
+        'joined', 'added', 'pinned', 'left', 'removed', 'changed', 'created',
+        'admin approval', 'changed this group', 'changed the subject',
+        'changed the group description',
+        "Only messages that mention @Meta AI are sent to Meta. Meta can't read any other messages in this chat. Some responses may be inaccurate or inappropriate. Tap to learn more.",
+        'message timer.', 'turned off disappearing messages',
+        "Messages and calls are end", "eleted this group's icon",
+        "arted a video call", "lows like a stagnant pond. Where the faculty",
+        "reset this group's invite link", "requested to join",
+        "Only messages that mention or people share with @Meta AI",
+        "Join other topic-based groups in this community and get admin announcements",
+        "*Learn, lead, and leave your mark*"
+    ]
+    return not any(phrase in line for phrase in ignore_phrases)
 
-file_name = input("Enter the name of the file(without .txt): ")
+def extract_sender(line):
+    try:
+        # Format: date, time - sender: message
+        parts = line.split("-", 1)
+        if len(parts) > 1:
+            sender = parts[1].split(":", 1)[0].strip()
+            return sender
+    except Exception:
+        pass
+    return None
 
-file = open(file_name+'.txt', 'r')
-
-count = {}
-
-for line in file:
-    
-    # continue if line not start with date
-
-    date = line.split(",")[0]
-    if len(date) == 8 or len(date) == 10:
-
-        # check if line contain the word "joined" or "added"
-        # remove those that contain these words
-        if 'joined' in line or 'added' in line or 'pinned' in line or 'left' in line or 'removed' in line or 'changed' in line or 'created' in line or 'admin approval' in line or 'changed this group' in line or 'changed the subject' in line or 'changed the group description' in line or "Only messages that mention @Meta AI are sent to Meta. Meta can't read any other messages in this chat. Some responses may be inaccurate or inappropriate. Tap to learn more." in line or ' message timer.' in line or 'turned off disappearing messages' in line or "Messages and calls are end" in line or "eleted this group's icon" in line or "arted a video call" in line or "lows like a stagnant pond. Where the faculty" in line or "reset this group's invite link" in line or "requested to join" in line:
-            continue
-        else:
-            name_or_number = line.split("-")
-            if len(name_or_number) > 1:
-                name_or_number = name_or_number[1].split(":")[0].strip()
-                if (name_or_number in count):
-                    count[name_or_number] += 1
-                else:
-                    count[name_or_number] = 1
-    else:
+file_name = input("Enter the name of the file (without .txt): ").strip()
+with open(file_name + '.txt', 'r', encoding='utf-8') as file:
+    count = defaultdict(int)
+    for line in file:
+        date_part = line.split(",", 1)[0]
+        if len(date_part) in (8, 10) and is_valid_message(line):
+            sender = extract_sender(line)
+            if sender:
+                count[sender] += 1
         continue
 
 x_axis = list(count.keys())
@@ -47,17 +59,22 @@ bar_colors = [
 
 plt.figure(figsize=(30, 10))
 
+# Add spacing by modifying x-axis positions
+x_positions = [i * 1.5 for i in range(len(x_axis))]
 
+bars = plt.bar(
+    x_positions, y_axis, align='center', 
+    color=[bar_colors[i % len(bar_colors)] for i in range(len(x_axis))], 
+    width=0.8  # Keep the width unchanged
+)
 
-bars = plt.bar(x_axis, y_axis, align = 'center', color = [bar_colors[i % len(bar_colors)] for i in range(len(x_axis))], width=1)
-# plt.bar(courses, values, color ='maroon', width = 0.4)
+plt.xticks(x_positions, x_axis, rotation='vertical', fontsize=8, ha='center')
 
 title = input("Enter the title of the graph: ")
 
 plt.xlabel('Phone Number/Name')
 plt.ylabel('Messages Sent')
 plt.title(title)
-plt.xticks(rotation='vertical', fontsize=8, ha='center')
 # plt.show()
 # plt.savefig('student_messages_bar_graph.png', bbox_inches='tight')
 
