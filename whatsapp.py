@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt 
+import re  # added for regex date matching
 
 file_name = input("Enter the name of the file(without .txt): ")
 
@@ -7,15 +8,15 @@ file = open(file_name+'.txt', 'r')
 count = {}
 
 for line in file:
-    
+    line = line.strip()  # trim whitespace
     # continue if line not start with date
 
     date = line.split(",")[0]
-    if len(date) == 8 or len(date) == 10:
+    if re.match(r'\d{1,2}/\d{1,2}/\d{2,4}', date):  # updated date check
 
         # check if line contain the word "joined" or "added"
         # remove those that contain these words
-        if 'joined' in line or 'added' in line or 'pinned' in line or 'left' in line or 'removed' in line or 'changed' in line or 'created' in line or 'admin approval' in line or 'changed this group' in line or 'changed the subject' in line or 'changed the group description' in line or "Only messages that mention @Meta AI are sent to Meta. Meta can't read any other messages in this chat. Some responses may be inaccurate or inappropriate. Tap to learn more." in line or ' message timer.' in line or 'turned off disappearing messages' in line or "Messages and calls are end" in line or "eleted this group's icon" in line or "arted a video call" in line or "lows like a stagnant pond. Where the faculty" in line or "reset this group's invite link" in line or "requested to join" in line:
+        if 'joined' in line or 'added' in line or 'pinned' in line or 'left' in line or 'removed' in line or 'changed' in line or 'created' in line or 'admin approval' in line or 'changed this group' in line or 'changed the subject' in line or 'changed the group description' in line or "Only messages that mention @Meta AI are sent to Meta. Meta can't read any other messages in this chat. Some responses may be inaccurate or inappropriate. Tap to learn more." in line or ' message timer.' in line or 'turned off disappearing messages' in line or "Messages and calls are end" in line or "eleted this group's icon" in line or "arted a video call" in line or "lows like a stagnant pond. Where the faculty" in line or "reset this group's invite link" in line or "requested to join" in line or "Only messages that mention or people share with @Meta AI can be read by Meta. Meta can t read any other messages in this chat, as your personal messages remain end" in line:
             continue
         else:
             name_or_number = line.split("-")
